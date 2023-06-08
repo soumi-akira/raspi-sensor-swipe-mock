@@ -1,46 +1,52 @@
 # raspi-sensor-swipe-mock
 
-This template should help get you started developing with Vue 3 in Vite.
+Raspberry PI + 測距センサー x 2 で簡易的なジェスチャ認識をするデモ
 
-## Recommended IDE Setup
+## 事前準備
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+### 動画を用意
 
-## Type Support for `.vue` Imports in TS
+サンプル動画が `ignore` されているので、追加する。
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+> Raspberry PI 4 のハードウェアアクセラレーションは `1080` / `30fps` が限度なので注意。
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+https://mazwai.com/video/icelandic-glacier-lake/455191
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+`assets/movie.mp4` として保存する。
 
-## Customize configuration
+### 配線
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+https://jp.sharp/products/device/lineup/selection/opto/haca/diagram.html
 
-## Project Setup
+16 番ピンと 18 番ピンに測距センサーの信号を送るように配線する。
+
+デモでは、16 番が右側、18 番が左側に配置される想定になっている。
+
+### ビルド
+
+ビルドコマンドでフロントエンドとサーバーが両方書き出される。
 
 ```sh
-npm install
+yarn build
 ```
 
-### Compile and Hot-Reload for Development
+### 実行
+
+書き出された `js` ファイルを実行する。
 
 ```sh
-npm run dev
+node dist/app.js
 ```
 
-### Type-Check, Compile and Minify for Production
+永続化したい場合は、`pm2` 等の利用を検討。
 
 ```sh
-npm run build
-```
+sudo npm i -g pm2
+sudo pm2 install pm2-logrotate
 
-### Lint with [ESLint](https://eslint.org/)
+pm2 startup
+# 出力される指示に従う
 
-```sh
-npm run lint
+pm2 start dist/app.js
+pm2 save
 ```
